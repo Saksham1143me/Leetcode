@@ -1,16 +1,24 @@
-#include <map>
-
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        map<ListNode*, int> mp;
-        while (head != NULL) {
-            if (mp.find(head) != mp.end()) {
-                return head;
-            }
-            mp[head] = 1;
-            head = head->next;
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast) break;
         }
-        return NULL;
+
+        if (!fast || !fast->next) return nullptr;
+
+        fast = head;
+        while (fast != slow) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+
+        return slow;        
     }
 };
